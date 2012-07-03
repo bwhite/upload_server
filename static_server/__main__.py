@@ -9,17 +9,16 @@ from static_server.auth import verify
 
 
 STATIC_PATH = os.path.abspath('.') + os.sep
-AUTH = True
 
 
 @bottle.route('/:path#.*[^/]#')
-@verify(lambda : AUTH)
+@verify(lambda : ARGS.noauth)
 def file(path):
     return bottle.static_file(path, root=STATIC_PATH)
 
 
 @bottle.route('/:path#.*#')
-@verify(lambda : AUTH)
+@verify(lambda : ARGS.noauth)
 def dir_page(path=''):
     if not ARGS.index:
         bottle.abort(401)
@@ -41,6 +40,6 @@ if __name__ == "__main__":
                         default='8080')
     parser.add_argument('--index', action='store_true')
     parser.add_argument('--dirs', action='store_true')
-    parser.add_argument('--auth', action='store_false')
+    parser.add_argument('--noauth', action='store_false')
     ARGS = parser.parse_args()
     bottle.run(host='0.0.0.0', port=ARGS.port, server='gevent')
