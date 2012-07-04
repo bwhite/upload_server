@@ -28,7 +28,7 @@ def dir_page(path=''):
     if not path.startswith(STATIC_PATH):
         bottle.abort(401)
     rel_path = path[len(STATIC_PATH):]
-    return ''.join('<a href="/%s%s%s">%s</a><br>' % (rel_path, x, '/' if os.path.isdir(os.path.join(path, x)) else '', x)
+    return ''.join('<a href="/%s%s%s?%s">%s</a><br>' % (rel_path, x, '/' if os.path.isdir(os.path.join(path, x)) else '', bottle.request.query_string, x)
                    for x in os.listdir(path))
 
 
