@@ -11,15 +11,15 @@ from static_server.auth import verify
 STATIC_PATH = os.path.abspath('.') + os.sep
 
 
-@bottle.route('/:path#.*[^/]#')
-@verify(lambda : ARGS.noauth)
-def file(path):
+@bottle.route('/:auth_key#[a-zA-Z0-9\_\-]+#/:path#.*[^/]#')
+@verify
+def file(auth_key, path):
     return bottle.static_file(path, root=STATIC_PATH)
 
 
-@bottle.route('/:path#.*#')
-@verify(lambda : ARGS.noauth)
-def dir_page(path=''):
+@bottle.route('/:auth_key#[a-zA-Z0-9\_\-]+#/:path#.*#')
+@verify
+def dir_page(auth_key, path=''):
     if not ARGS.index:
         bottle.abort(401)
     if not ARGS.dirs and path not in ('/', ''):
@@ -28,7 +28,7 @@ def dir_page(path=''):
     if not path.startswith(STATIC_PATH):
         bottle.abort(401)
     rel_path = path[len(STATIC_PATH):]
-    return ''.join('<a href="/%s%s%s?%s">%s</a><br>' % (rel_path, x, '/' if os.path.isdir(os.path.join(path, x)) else '', bottle.request.query_string, x)
+    return ''.join('<a href="/%s/%s%s%s">%s</a><br>' % (auth_key, rel_path, x, '/' if os.path.isdir(os.path.join(path, x)) else '', x)
                    for x in os.listdir(path))
 
 
@@ -40,6 +40,5 @@ if __name__ == "__main__":
                         default='8080')
     parser.add_argument('--index', action='store_true')
     parser.add_argument('--dirs', action='store_true')
-    parser.add_argument('--noauth', action='store_false')
     ARGS = parser.parse_args()
     bottle.run(host='0.0.0.0', port=ARGS.port, server='gevent')
