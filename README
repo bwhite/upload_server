@@ -1,7 +1,7 @@
-Andrew Miller <amiller@dappervision.com>
 Brandyn A. White <bwhite@dappervision.com>
+Andrew Miller <amiller@dappervision.com>
 
 Requires: bottle and gevent
 
 Usage:
-- python -m static_server 8080
+- python -m upload_server 8080

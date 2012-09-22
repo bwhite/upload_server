@@ -2,9 +2,9 @@
 from distutils.core import setup
 
 
-setup(name='static_server',
+setup(name='upload_server',
       version='0.0.1',
-      packages=['static_server'],
-      author='Andrew Miller',
-      author_email='amiller@dappervision.com',
+      packages=['upload_server'],
+      author='Brandyn White',
+      author_email='bwhite@dappervision.com',
       license='GPL')
